@@ -1,10 +1,17 @@
 import { Box, Heading, VStack, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ user }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !user.isAdmin) {
+      navigate("/admin/login");
+    }
+  }, [user, navigate]);
 
   const handleLogout = async () => {
     try {

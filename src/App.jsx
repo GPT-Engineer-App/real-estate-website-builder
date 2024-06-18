@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setUser({ ...user, isAdmin: user.email === "admin@example.com" }); // Assuming admin is identified by email
       } else {
         setUser(null);
       }
@@ -37,7 +37,7 @@ function App() {
         <Route path="/post-property" element={user ? <PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} /> : <Login />} />
         <Route path="/edit-property/:index" element={user ? <PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} /> : <Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin/dashboard" element={user ? <AdminDashboard /> : <AdminLogin />} />
+        <Route path="/admin/dashboard" element={user && user.isAdmin ? <AdminDashboard /> : <AdminLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/manage-properties" element={user ? <ManageProperties properties={properties} setProperties={setProperties} /> : <AdminLogin />} />
         <Route path="/admin/edit-property/:index" element={user ? <PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} /> : <AdminLogin />} />
