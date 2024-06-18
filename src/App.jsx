@@ -13,8 +13,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<Index properties={properties} />} />
-        <Route path="/post-property" element={<PropertyForm addProperty={addProperty} />} /> {/* Add the new route */}
+        <Route exact path="/" element={<Index properties={properties} setProperties={setProperties} />} />
+        <Route path="/post-property" element={<PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} />} /> {/* Add the new route */}
+        <Route path="/edit-property/:index" element={<PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} />} /> {/* Add the edit route */}
       </Routes>
     </Router>
   );

@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Box, Heading, FormControl, FormLabel, Input, Textarea, Button, Image, VStack } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 
-const PropertyForm = ({ addProperty }) => {
+const PropertyForm = ({ addProperty, properties, setProperties }) => {
+  const { index } = useParams();
+  const isEdit = index !== undefined;
   const [propertyName, setPropertyName] = useState("");
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState("");
   const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    if (isEdit) {
+      const propertyToEdit = properties[index];
+      setPropertyName(propertyToEdit.propertyName);
+      setAddress(propertyToEdit.address);
+      setPrice(propertyToEdit.price);
+      setPhotos(propertyToEdit.photos);
+    }
+  }, [isEdit, index, properties]);
 
   const handlePhotoChange = (e) => {
     setPhotos([...e.target.files]);
@@ -15,19 +28,27 @@ const PropertyForm = ({ addProperty }) => {
     e.preventDefault();
     const newProperty = { propertyName, address, price, photos: photos.map(photo => URL.createObjectURL(photo)) };
     const storedProperties = JSON.parse(localStorage.getItem("properties")) || [];
-    storedProperties.push(newProperty);
+
+    if (isEdit) {
+      storedProperties[index] = newProperty;
+    } else {
+      storedProperties.push(newProperty);
+    }
+
     localStorage.setItem("properties", JSON.stringify(storedProperties));
+    setProperties(storedProperties);
     addProperty(newProperty);
     setPropertyName("");
     setAddress("");
     setPrice("");
     setPhotos([]);
+    window.location.href = "/";
   };
 
   return (
     <Container maxW="container.md" mt={8}>
       <Box p={8} borderWidth={1} borderRadius="md" boxShadow="lg">
-        <Heading mb={6}>Post a Property</Heading>
+        <Heading mb={6}>{isEdit ? "Edit Property" : "Post a Property"}</Heading>
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl id="property-name" isRequired>
@@ -77,7 +98,7 @@ const PropertyForm = ({ addProperty }) => {
               </Box>
             </FormControl>
             <Button type="submit" colorScheme="teal" size="lg" width="full">
-              Submit
+              {isEdit ? "Update" : "Submit"}
             </Button>
           </VStack>
         </form>
