@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { Container, Box, VStack, Heading, Text, Button, Image, Flex, IconButton } from "@chakra-ui/react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-
-const Index = () => {
-  const [properties, setProperties] = useState([]);
+const Index = ({ properties }) => {
 
   return (
     <Container maxW="container.xl" p={0}>
