@@ -1,13 +1,24 @@
 import { Container, Box, VStack, Heading, Text, Button, Image, Flex, IconButton } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-const Index = () => {
-  const [properties, setProperties] = useState([]);
+import { useEffect } from "react";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
 
+const Index = ({ properties, setProperties }) => {
   useEffect(() => {
     const storedProperties = JSON.parse(localStorage.getItem("properties")) || [];
     setProperties(storedProperties);
-  }, []);
+  }, [setProperties]);
+
+  const handleDelete = (index) => {
+    const updatedProperties = properties.filter((_, i) => i !== index);
+    setProperties(updatedProperties);
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+  };
+
+  const handleEdit = (index) => {
+    const propertyToEdit = properties[index];
+    // Redirect to PropertyForm with the property data to edit
+    window.location.href = `/edit-property/${index}`;
+  };
 
   return (
     <Container maxW="container.xl" p={0}>
@@ -50,6 +61,10 @@ const Index = () => {
                 <Heading size="md" mb={2}>{property.propertyName}</Heading>
                 <Text>{property.address}</Text>
                 <Text>${property.price}</Text>
+                <Flex justify="center" mt={4}>
+                  <IconButton aria-label="Edit" icon={<FaEdit />} size="sm" mr={2} onClick={() => handleEdit(index)} />
+                  <IconButton aria-label="Delete" icon={<FaTrash />} size="sm" onClick={() => handleDelete(index)} />
+                </Flex>
               </Box>
             ))
           ) : (
