@@ -8,6 +8,7 @@ import PropertyForm from "./pages/PropertyForm.jsx"; // Import the new PropertyF
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import ManageProperties from "./pages/ManageProperties.jsx";
+import RegisterAccount from "./pages/RegisterAccount.jsx";
 
 function App() {
   const [properties, setProperties] = useState([]);
@@ -37,6 +38,7 @@ function App() {
         <Route path="/post-property" element={user ? <PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} /> : <Login />} />
         <Route path="/edit-property/:index" element={user ? <PropertyForm addProperty={addProperty} properties={properties} setProperties={setProperties} /> : <Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterAccount />} />
         <Route path="/admin/dashboard" element={user && user.isAdmin ? <AdminDashboard /> : <AdminLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/manage-properties" element={user ? <ManageProperties properties={properties} setProperties={setProperties} /> : <AdminLogin />} />
