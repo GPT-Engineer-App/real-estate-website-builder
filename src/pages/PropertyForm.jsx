@@ -13,7 +13,10 @@ const PropertyForm = ({ addProperty }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newProperty = { propertyName, address, price, photos };
+    const newProperty = { propertyName, address, price, photos: photos.map(photo => URL.createObjectURL(photo)) };
+    const storedProperties = JSON.parse(localStorage.getItem("properties")) || [];
+    storedProperties.push(newProperty);
+    localStorage.setItem("properties", JSON.stringify(storedProperties));
     addProperty(newProperty);
     setPropertyName("");
     setAddress("");
