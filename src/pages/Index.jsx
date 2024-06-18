@@ -1,6 +1,13 @@
 import { Container, Box, VStack, Heading, Text, Button, Image, Flex, IconButton } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-const Index = ({ properties }) => {
+const Index = () => {
+  const [properties, setProperties] = useState([]);
+
+  useEffect(() => {
+    const storedProperties = JSON.parse(localStorage.getItem("properties")) || [];
+    setProperties(storedProperties);
+  }, []);
 
   return (
     <Container maxW="container.xl" p={0}>
@@ -39,7 +46,7 @@ const Index = ({ properties }) => {
           {properties.length > 0 ? (
             properties.map((property, index) => (
               <Box key={index} width="300px" textAlign="center" mb={8}>
-                <Image src={URL.createObjectURL(property.photos[0])} borderRadius="md" mb={4} />
+                <Image src={property.photos[0]} borderRadius="md" mb={4} />
                 <Heading size="md" mb={2}>{property.propertyName}</Heading>
                 <Text>{property.address}</Text>
                 <Text>${property.price}</Text>
