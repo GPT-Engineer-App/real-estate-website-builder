@@ -1,8 +1,10 @@
 import { Container, Box, VStack, Heading, Text, Button, Image, Flex, IconButton } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
-const Index = ({ properties, setProperties }) => {
+const Index = ({ properties, setProperties, user }) => {
   useEffect(() => {
     const storedProperties = JSON.parse(localStorage.getItem("properties")) || [];
     setProperties(storedProperties);
@@ -16,8 +18,16 @@ const Index = ({ properties, setProperties }) => {
 
   const handleEdit = (index) => {
     const propertyToEdit = properties[index];
-    // Redirect to PropertyForm with the property data to edit
     window.location.href = `/edit-property/${index}`;
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error logging out: ", error);
+    }
   };
 
   return (
@@ -61,10 +71,12 @@ const Index = ({ properties, setProperties }) => {
                 <Heading size="md" mb={2}>{property.propertyName}</Heading>
                 <Text>{property.address}</Text>
                 <Text>${property.price}</Text>
-                <Flex justify="center" mt={4}>
-                  <IconButton aria-label="Edit" icon={<FaEdit />} size="sm" mr={2} onClick={() => handleEdit(index)} />
-                  <IconButton aria-label="Delete" icon={<FaTrash />} size="sm" onClick={() => handleDelete(index)} />
-                </Flex>
+                {user && (
+                  <Flex justify="center" mt={4}>
+                    <IconButton aria-label="Edit" icon={<FaEdit />} size="sm" mr={2} onClick={() => handleEdit(index)} />
+                    <IconButton aria-label="Delete" icon={<FaTrash />} size="sm" onClick={() => handleDelete(index)} />
+                  </Flex>
+                )}
               </Box>
             ))
           ) : (
@@ -89,6 +101,11 @@ const Index = ({ properties, setProperties }) => {
             <Text>123 Main St, Anytown, USA</Text>
           </Box>
         </Flex>
+        {user && (
+          <Flex justify="center" mt={4}>
+            <Button colorScheme="teal" onClick={handleLogout}>Logout</Button>
+          </Flex>
+        )}
       </Box>
     </Container>
   );
