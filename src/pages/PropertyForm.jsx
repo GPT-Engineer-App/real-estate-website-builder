@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Box, Heading, FormControl, FormLabel, Input, Textarea, Button, Image, VStack } from "@chakra-ui/react";
 
-const PropertyForm = () => {
+const PropertyForm = ({ addProperty }) => {
   const [propertyName, setPropertyName] = useState("");
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState("");
@@ -13,8 +13,12 @@ const PropertyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log({ propertyName, address, price, photos });
+    const newProperty = { propertyName, address, price, photos };
+    addProperty(newProperty);
+    setPropertyName("");
+    setAddress("");
+    setPrice("");
+    setPhotos([]);
   };
 
   return (

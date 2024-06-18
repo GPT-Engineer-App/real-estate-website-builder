@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Container, Box, VStack, Heading, Text, Button, Image, Flex, IconButton } from "@chakra-ui/react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const Index = () => {
+  const [properties, setProperties] = useState([]);
+
   return (
     <Container maxW="container.xl" p={0}>
       <Box bgImage="url('/images/hero-bg.jpg')" bgSize="cover" bgPos="center" height="100vh" display="flex" alignItems="center" justifyContent="center">
@@ -30,6 +33,24 @@ const Index = () => {
             <Heading size="md" mb={2}>Renting a Home</Heading>
             <Text>Find rental properties that meet your needs and budget.</Text>
           </Box>
+        </Flex>
+      </Box>
+
+      <Box p={8}>
+        <Heading textAlign="center" mb={8}>Posted Properties</Heading>
+        <Flex justify="space-around" wrap="wrap">
+          {properties.length > 0 ? (
+            properties.map((property, index) => (
+              <Box key={index} width="300px" textAlign="center" mb={8}>
+                <Image src={URL.createObjectURL(property.photos[0])} borderRadius="md" mb={4} />
+                <Heading size="md" mb={2}>{property.propertyName}</Heading>
+                <Text>{property.address}</Text>
+                <Text>${property.price}</Text>
+              </Box>
+            ))
+          ) : (
+            <Text>No properties posted yet.</Text>
+          )}
         </Flex>
       </Box>
 
